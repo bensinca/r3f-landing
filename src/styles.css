@@ -283,7 +283,8 @@ svg {
         padding-left: 0;
     }
     .about-text-sub-right.with-italic {
-        right: -140px;
+        right: -10px;
+        top: -40px;
     }
     .about-text-sub-left {
         position: absolute;
@@ -301,6 +302,7 @@ svg {
         display: inline-block;
         padding-left: 30px;
         vertical-align: middle;
+        top: 0;
         position: relative;
     }
 }
