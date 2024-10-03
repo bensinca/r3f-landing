@@ -5,8 +5,6 @@ import { PerspectiveCamera, Environment, MeshDistortMaterial, ContactShadows, Te
 import { useSpring } from '@react-spring/core'
 import { a } from '@react-spring/three'
 
-// React-spring animates native elements, in this case <mesh/> etc,
-// but it can also handle 3rd–party objs, just wrap them in "a".
 const AnimatedMaterial = a(MeshDistortMaterial)
 
 export default function Scene({ setBg }) {
@@ -18,7 +16,6 @@ export default function Scene({ setBg }) {
   const [scrollY, setScrollY] = useState(0)
   const [isContactFullyVisible, setIsContactFullyVisible] = useState(false)
 
-  // Change cursor on hovered state
   useEffect(() => {
     document.body.style.cursor = hovered
       ? 'none'
@@ -27,7 +24,6 @@ export default function Scene({ setBg }) {
         )}'), auto`
   }, [hovered])
 
-  // Use the useScroll hook to get scroll data
   const scroll = useScroll()
 
   useEffect(() => {
@@ -50,8 +46,6 @@ export default function Scene({ setBg }) {
     }
   }, [])
 
-  // Make the bubble float and follow the mouse
-  // This is frame-based animation, useFrame subscribes the component to the render-loop
   useFrame((state) => {
     light.current.position.x = state.mouse.x * 20
     light.current.position.y = state.mouse.y * 20
@@ -59,7 +53,7 @@ export default function Scene({ setBg }) {
       const scrollOffset = scroll?.offset ?? (scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 1.5)
       let targetX
       if (isContactFullyVisible) {
-        targetX = 2 // Move to the right when contact section is fully visible
+        targetX = 2 
       } else {
         targetX = scrollOffset > 0.5 ? -3 : (hovered ? state.mouse.x / 2 : 0)
       }
@@ -72,8 +66,6 @@ export default function Scene({ setBg }) {
     }
   })
 
-  // Springs for color and overall looks, this is state-driven animation
-  // React-spring is physics based and turns static props into animated values
   const [{ wobble, coat, color, ambient, env }] = useSpring(
     {
       wobble: down ? 1.2 : hovered ? 1.05 : 1,
@@ -101,7 +93,6 @@ export default function Scene({ setBg }) {
           onPointerDown={() => setDown(true)}
           onPointerUp={() => {
             setDown(false)
-            // Toggle mode between dark and bright
             setMode(!mode)
             setBg({ background: !mode ? '#202020' : '#f0f0f0', fill: !mode ? '#f0f0f0' : '#202020' })
           }}>
