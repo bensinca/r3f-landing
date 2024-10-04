@@ -15,6 +15,7 @@ export default function Scene({ setBg }) {
   const [hovered, setHovered] = useState(false)
   const [scrollY, setScrollY] = useState(0)
   const [isContactFullyVisible, setIsContactFullyVisible] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     document.body.style.cursor = hovered
@@ -33,8 +34,7 @@ export default function Scene({ setBg }) {
       if (contactSection) {
         const contactRect = contactSection.getBoundingClientRect()
         setIsContactFullyVisible(
-          contactRect.top >= 0 &&
-          contactRect.bottom <= window.innerHeight * 1.5
+          contactRect.bottom / 1.5 <= window.innerHeight
         )
       }
     }
@@ -44,6 +44,15 @@ export default function Scene({ setBg }) {
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
+  }, [])
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 1023)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
   useFrame((state) => {
@@ -88,13 +97,13 @@ export default function Scene({ setBg }) {
         <a.mesh
           ref={sphere}
           scale={wobble}
-          onPointerOver={() => setHovered(true)}
-          onPointerOut={() => setHovered(false)}
-          onPointerDown={() => setDown(true)}
+          onPointerOver={() => !isMobile && setHovered(true)}
+          onPointerOut={() => !isMobile && setHovered(false)}
+          onPointerDown={() => !isMobile && setDown(true)}
           onPointerUp={() => {
-            setDown(false)
-            setMode(!mode)
-            setBg({ background: !mode ? '#202020' : '#f0f0f0', fill: !mode ? '#f0f0f0' : '#202020' })
+              setDown(false)
+              setMode(!mode)
+              setBg({ background: !mode ? '#202020' : '#f0f0f0', fill: !mode ? '#f0f0f0' : '#202020' })
           }}>
           <sphereGeometry args={[1, 64, 64]} />
           <AnimatedMaterial

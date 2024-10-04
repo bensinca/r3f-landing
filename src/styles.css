@@ -215,6 +215,16 @@ svg {
     .canvas.scrolled {
         top: -300px;
     }
+
+    .canvas {
+        touch-action: auto !important;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .canvas {
+        touch-action: auto !important;
+    }
 }
 
 @media screen and (min-width: 768px) {
